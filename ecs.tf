@@ -6,15 +6,15 @@ resource "aws_ecs_task_definition" "service" {
   family                   = "flask-dev"
   network_mode             = "awsvpc"
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
-  cpu                      = 100
-  memory                   = 256
+  cpu                      = 512
+  memory                   = 1024
   requires_compatibilities = ["FARGATE"]
   container_definitions = jsonencode(
     [
       {
         "name" : "flask",
         "image" : "docker.io/worstcaseffm/flaskserver:v1",
-        "cpu" : 10,
+        "cpu" : 128,
         "memory" : 256,
         "essential" : true,
         "portMappings" : [
@@ -25,7 +25,7 @@ resource "aws_ecs_task_definition" "service" {
       }
     ]
   )
-  
+
   tags = {
     Environment = "dev"
     Application = "flask"
@@ -36,7 +36,7 @@ resource "aws_ecs_service" "dev" {
   name            = "dev"
   cluster         = aws_ecs_cluster.dev.id
   task_definition = aws_ecs_task_definition.service.arn
-  desired_count   = 1
+  desired_count   = 2
   launch_type     = "FARGATE"
 
   network_configuration {

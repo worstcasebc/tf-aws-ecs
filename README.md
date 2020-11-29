@@ -1,11 +1,13 @@
 # Terraform-Environment
 
+An ECS with Fargate-option and loadbalancer will be created in a dedicated VPC incl. NAT-gatway and bastion-host.
+
 Prerequisites:
-aws-vault is already installed and your IAM-user is configured for aws-vault. Also docker and docker-compose are locally installed.
+aws-vault is already installed and your IAM-user is configured for aws-vault (MFA is necessry for that account, else the IAM roles can't be created autmatically). Also docker and docker-compose are locally installed.
 
 Open a vault-session for the next 12 hours
 
-`aws-vault exec <user> --duration=12h`
+`aws-vault exec <user> --duration=5h`
 
 We use a docker container to better handle the different terraform versions.
 

@@ -9,3 +9,7 @@ output "my-own-ip" {
 output "bastion-host-ssh" {
   value = format("ssh -A ec2-user@%s", aws_instance.bastionhost.public_ip)
 }
+
+output "elb-public-dns" {
+  value = format("http://%s/", aws_lb.alb.dns_name)
+}

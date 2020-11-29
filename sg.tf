@@ -1,5 +1,6 @@
 resource "aws_security_group" "elb" {
-  name        = "sg-elb"
+  vpc_id      = aws_vpc.vpc.id
+  name        = "elb-sg"
   description = "controls access to the ELB"
 
   ingress {
@@ -18,16 +19,9 @@ resource "aws_security_group" "elb" {
 }
 
 resource "aws_security_group" "ecs_tasks" {
-  name        = "sg-ecs-tasks"
+  vpc_id      = aws_vpc.vpc.id
+  name        = "ecs-tasks-sg"
   description = "allow inbound access from the ELB only"
-
-  ingress {
-    protocol  = "tcp"
-    from_port = 5000
-    to_port   = 5000
-    #cidr_blocks     = ["0.0.0.0/0"]
-    security_group_id = [aws_security_group.elb.id]
-  }
 
   egress {
     protocol    = "-1"
@@ -35,4 +29,22 @@ resource "aws_security_group" "ecs_tasks" {
     to_port     = 0
     cidr_blocks = ["0.0.0.0/0"]
   }
+}
+
+resource "aws_security_group_rule" "inbound-eighty" {
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.elb.id
+  security_group_id        = aws_security_group.ecs_tasks.id
+}
+
+resource "aws_security_group_rule" "inbound-fivethousand" {
+  type                     = "ingress"
+  from_port                = 5000
+  to_port                  = 5000
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.elb.id
+  security_group_id        = aws_security_group.ecs_tasks.id
 }

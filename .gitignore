@@ -1,5 +1,5 @@
 .terraform
-.ssh
+.terraform.*
 terraform.tfstate
 terraform.tfstate.*
 error.*
