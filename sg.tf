@@ -50,6 +50,7 @@ resource "aws_security_group_rule" "inbound-fivethousand" {
 }
 
 resource "aws_security_group_rule" "inbound-twentytwo" {
+  count                    = var.bastion_host ? 1 : 0
   type                     = "ingress"
   from_port                = 22
   to_port                  = 22

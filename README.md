@@ -5,7 +5,7 @@ An ECS with Fargate-option and loadbalancer will be created in a dedicated VPC i
 Prerequisites:
 aws-vault is already installed and your IAM-user is configured for aws-vault (MFA is necessry for that account, else the IAM roles can't be created autmatically). Also docker and docker-compose are locally installed.
 
-Open a vault-session for the next 12 hours
+Open a vault-session for the next 5 hours
 
 `aws-vault exec <user> --duration=5h`
 
@@ -20,7 +20,7 @@ docker-compose run --rm tf apply
 docker-compose run --rm tf destroy
 ```
 
-After applying the infrastructure-code to aour AWS account, check with the `elb-public-dns`in your browser.
+After applying the infrastructure-code to aour AWS account, check with the `elb-public-dns`in your browser. After the Terraform-deployment the container takes some time to get up and running.
 
 A bastion-host is automatically created (if set in vpc-params) to allow ssh-access to the webserver-instances within private subnets. The inbound-traffic is restricted to the actual used public-ip.
 
