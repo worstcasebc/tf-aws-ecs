@@ -1,9 +1,9 @@
 resource "aws_lb" "alb" {
   name = "alb"
   subnets = [
-    aws_subnet.public-subnet[0].id,
-    aws_subnet.public-subnet[1].id,
-    aws_subnet.public-subnet[2].id,
+    module.vpc.public-subnet[0].id,
+    module.vpc.public-subnet[1].id,
+    module.vpc.public-subnet[2].id,
   ]
   load_balancer_type = "application"
   security_groups    = [aws_security_group.elb.id]
@@ -29,16 +29,20 @@ resource "aws_lb_target_group" "dev" {
   name        = "tg-alb-flask"
   port        = 80
   protocol    = "HTTP"
-  vpc_id      = aws_vpc.vpc.id
+  vpc_id      = module.vpc.vpc_id
   target_type = "ip"
 
   health_check {
     healthy_threshold   = "3"
-    interval            = "90"
+    interval            = "60"
     protocol            = "HTTP"
     matcher             = "200-299"
-    timeout             = "20"
+    timeout             = "15"
     path                = "/"
     unhealthy_threshold = "2"
   }
+}
+
+output "elb-public-dns" {
+  value = format("http://%s/", aws_lb.alb.dns_name)
 }

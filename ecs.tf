@@ -3,7 +3,7 @@ resource "aws_ecs_cluster" "dev" {
 }
 
 resource "aws_ecs_task_definition" "service" {
-  family                   = "flask-dev"
+  family                   = "flask"
   network_mode             = "awsvpc"
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   cpu                      = 512
@@ -33,7 +33,7 @@ resource "aws_ecs_task_definition" "service" {
 }
 
 resource "aws_ecs_service" "dev" {
-  name            = "dev"
+  name            = "flask"
   cluster         = aws_ecs_cluster.dev.id
   task_definition = aws_ecs_task_definition.service.arn
   desired_count   = 2
@@ -42,9 +42,9 @@ resource "aws_ecs_service" "dev" {
   network_configuration {
     security_groups = [aws_security_group.ecs_tasks.id]
     subnets = [
-      aws_subnet.private-subnet[0].id,
-      aws_subnet.private-subnet[1].id,
-      aws_subnet.private-subnet[2].id,
+      module.vpc.private-subnet[0].id,
+      module.vpc.private-subnet[1].id,
+      module.vpc.private-subnet[2].id,
     ]
     assign_public_ip = false
   }

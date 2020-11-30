@@ -22,7 +22,7 @@ docker-compose run --rm tf destroy
 
 After applying the infrastructure-code to aour AWS account, check with the `elb-public-dns`in your browser.
 
-A bastion-host is automatically created to allow ssh-access to the webserver-instances within private subnets. The inbound-traffic is restricted to the actual used public-ip.
+A bastion-host is automatically created (if set in vpc-params) to allow ssh-access to the webserver-instances within private subnets. The inbound-traffic is restricted to the actual used public-ip.
 
 If not already done, add your private key to the ssh-agent to forward it to the bastion-host.
 
